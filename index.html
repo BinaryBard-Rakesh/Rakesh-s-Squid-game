@@ -70,7 +70,7 @@
 
                 if (userGuess === randomNumber) {
                     wins++;
-                    if(pay=0){
+                    if(pay<0){
                         pay = 0;
                     }else{
                         pay = (losses - wins) * 100;
