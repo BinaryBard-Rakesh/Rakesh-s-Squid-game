@@ -1,0 +1,69 @@
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Squid Game</title>
+    <style>
+        body {
+            background-color: black;
+            color: green;
+            font-family: "Courier New", monospace;
+            text-align: left;
+            padding: 20px;
+        }
+        h1 {
+            text-align: center;
+            font-family: "Arial", sans-serif;
+        }
+        #result {
+            margin-top: 20px;
+            font-size: 20px;
+            white-space: pre-line;
+        }
+        .input-container {
+            display: flex;
+            align-items: center;
+        }
+        .input-container input {
+            margin-left: 10px;
+        }
+    </style>
+</head>
+<body>
+    <h1>A game from your friend Rakesh.</h1>
+    <p>We are playing a game. Here is a random number.</p>
+    <p>If you can guess the number, you win.</p>
+    <p>If you can't, you lose and I am the winner.</p>
+    <p>And if I win, you have to give me a treat worth minimum 100 rupees.</p>
+    <p>So, let's start the game.</p>
+    <div class="input-container">
+        <p>Type a number between 0 to 10:</p>
+        <input type="number" id="guess" min="0" max="10">
+    </div>
+    <button onclick="playGame()">Submit</button>
+    <p id="result"></p>
+
+    <script>
+        function playGame() {
+            let userGuess = parseInt(document.getElementById("guess").value);
+            let randomNumber = Math.floor(Math.random() * 11);
+            let result = "";
+            
+            if (userGuess > 10 || userGuess < 0 || isNaN(userGuess)) {
+                result = userGuess + " is not between 0 to 10.\n" +
+                         "Please type a number between 0 to 10.";
+            } else if (userGuess === randomNumber) {
+                result = "You win!";
+            } else {
+                result = "You lose!\n" +
+                         "The number was: " + randomNumber + "\n" +
+                         "You owe me a treat worth minimum 100 rupees.\n" +
+                         "Please text me the restaurant name, place, and time.\n" +
+                         "Better luck next time.";
+            }
+            
+            document.getElementById("result").innerText = result;
+        }
+    </script>
+</body>
+</html>
