@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Game Results</title>
+    <style>
+        body {
+            background-color: black;
+            color: green;
+            font-family: "Courier New", monospace;
+            text-align: center;
+            padding: 22px;
+        }
+        table {
+            width: 80%;
+            margin: 20px auto;
+            border-collapse: collapse;
+        }
+        th, td {
+            border: 1px solid green;
+            padding: 10px;
+            text-align: center;
+        }
+        th {
+            background-color: darkgreen;
+        }
+        button {
+            margin-top: 20px;
+            padding: 8px 15px;
+            font-size: 16px;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+    <h1>Game Results</h1>
+    <table>
+        <thead>
+            <tr>
+                <th>Name</th>
+                <th>Games Played</th>
+                <th>Wins</th>
+                <th>Losses</th>
+                <th>Pay (₹)</th>
+            </tr>
+        </thead>
+        <tbody id="resultsTable">
+            <!-- Results will be populated here -->
+        </tbody>
+    </table>
+    <button onclick="clearResults()">Clear Results</button>
+    <script>
+        function loadResults() {
+            let results = JSON.parse(localStorage.getItem("gameResults")) || [];
+            let tableBody = document.getElementById("resultsTable");
+            tableBody.innerHTML = "";
+            
+            results.forEach(result => {
+                let row = `<tr>
+                    <td>${result.name}</td>
+                    <td>${result.gamesPlayed}</td>
+                    <td>${result.wins}</td>
+                    <td>${result.losses}</td>
+                    <td>${result.pay}</td>
+                </tr>`;
+                tableBody.innerHTML += row;
+            });
+        }
+
+        function clearResults() {
+            localStorage.removeItem("gameResults");
+            loadResults();
+        }
+
+        window.onload = loadResults;
+    </script>
+</body>
+</html>
