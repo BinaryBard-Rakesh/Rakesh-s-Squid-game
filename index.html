@@ -70,7 +70,11 @@
 
                 if (userGuess === randomNumber) {
                     wins++;
-                    pay = (losses - wins) * 100;
+                    if(pay=0){
+                        pay = 0;
+                    }else{
+                        pay = (losses - wins) * 100;
+                    }
                     result = "You win!\n" +
                              "You have to pay " + pay + " rupees to treat me.";
                 } else {
