@@ -3,51 +3,67 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Squid Game</title>
+    <title>A Treat Game</title>
     <style>
         body {
             background-color: black;
             color: green;
             font-family: "Courier New", monospace;
             text-align: left;
-            padding: 20px;
+            padding: 22px;
+        }
+        h2{
+            background-color: black;
+            color: green;
+            font-family: "Courier New", monospace;
+            font-size:16px;
+            text-align: center;
+            padding: 22px;
         }
         h1 {
             text-align: center;
             font-family: "Arial", sans-serif;
         }
-        #result {
-            margin-top: 20px;
-            font-size: 20px;
-            white-space: pre-line;
-        }
         .input-container {
-            display: flex;
-            align-items: center;
+            margin: 20px;
         }
-        .input-container input {
-            margin-left: 10px;
+        .hidden {
+            display: none;
+        }
+        button {
+            margin-top: 10px;
+            padding: 8px 15px;
+            font-size: 16px;
+            cursor: pointer;
         }
     </style>
 </head>
 <body>
-    <h1>A game from your friend Rakesh.</h1>
-    <p>We are playing a game. Here is a random number.</p>
-    <p>If you can guess the number, you win.</p>
-    <p>If you can't, you lose. Then you have to pay (times you lose x 100) rupees to treat me.</p>
-    <p>And if you win, then you have a chance to save your money.</p>
-    <p>(times you lose - times you win) x 100 rupees you have to pay to treat me.</p>
-    <p>So, let's start the game, and ALL THE BEST! :)</p>
-    <div class="input-container">
-        <p>Type a number between 0 to 10:</p>
-        <input type="number" id="guess" min="0" max="10">
+    <h1>Hello, It's a game from your friend Rakesh!</h1>
+    <div id="nameInput">
+        <h2>Enter your name to start:<h2>
+        <input type="text" id="playerName">
+        <button onclick="startGame()">Start Game</button>
     </div>
-    <button onclick="playGame()">Submit</button>
-    <p id="result"></p>
-    <p id="stats"></p>
+
+    <div id="gameContainer" class="hidden">
+        <p>Hello, <span id="displayName"></span>!</p>
+        <p>We are playing a game. Here is a random number.</p>
+        <p>If you can guess the number, you win.</p>
+        <p>If you can't, you lose. Then you have to pay (times you lose x 100) rupees to treat me.</p>
+        <p>And if you win, then you have a chance to save your money.</p>
+        <p>(times you lose - times you win) x 100 rupees you have to pay to treat me.</p>
+        <p>So, let's start the game, and ALL THE BEST! :)</p>
+        <p>Guess a number between 0 and 10:</p>
+        <input type="number" id="guess" min="0" max="10">
+        <button onclick="playGame()">Submit</button>
+        <p id="result"></p>
+        <p id="stats"></p>
+        <!-- <button onclick="showResults()">View Results</button> -->
+    </div>
 
     <script>
-        // Reset stats on page load
+        let playerName = "";
         let gamesPlayed = 0;
         let wins = 0;
         let losses = 0;
@@ -56,20 +72,31 @@
             document.getElementById("stats").innerText = `Games Played: ${gamesPlayed} | Wins: ${wins} | Losses: ${losses}`;
         }
 
+        function startGame() {
+            playerName = document.getElementById("playerName").value.trim();
+            if (playerName === "") {
+                alert("Please enter your name to start the game.");
+                return;
+            }
+            document.getElementById("nameInput").classList.add("hidden");
+            document.getElementById("gameContainer").classList.remove("hidden");
+            document.getElementById("displayName").innerText = playerName;
+        }
+
         function playGame() {
             let userGuess = parseInt(document.getElementById("guess").value);
             let randomNumber = Math.floor(Math.random() * 11);
-            let pay = (losses - wins) * 100;
+            let pay = 0;
             let result = "";
 
-            if (userGuess > 10 || userGuess < 0 || isNaN(userGuess)) {
-                result = userGuess + " is not between 0 to 10.\n" +
-                         "Please type a number between 0 to 10.";
+            if (userGuess < 0 || userGuess > 10 || isNaN(userGuess)) {
+                result = "Please enter a valid number between 0 and 10.";
             } else {
                 gamesPlayed++;
 
                 if (userGuess === randomNumber) {
                     wins++;
+                    pay = (losses - wins) * 100;
                     if(pay<0){
                         pay = 0;
                     }else{
@@ -91,10 +118,26 @@
 
             document.getElementById("result").innerText = result;
             updateStats();
+            saveResults();
         }
 
-        // Display initial stats on page load
         updateStats();
+
+        function saveResults() {
+        let results = JSON.parse(localStorage.getItem("gameResults")) || [];
+        let existing = results.find(r => r.name === playerName);
+
+        if (existing) {
+            existing.gamesPlayed = gamesPlayed;
+            existing.wins = wins;
+            existing.losses = losses;
+            existing.pay = (losses - wins) * 100;
+        } else {
+            results.push({ name: playerName, gamesPlayed, wins, losses, pay: (losses - wins) * 100 });
+        }
+
+        localStorage.setItem("gameResults", JSON.stringify(results));
+        }
     </script>
 </body>
 </html>
