@@ -97,10 +97,8 @@
                 if (userGuess === randomNumber) {
                     wins++;
                     pay = (losses - wins) * 100;
-                    if(pay<0){
+                    if(pay < 0) {
                         pay = 0;
-                    }else{
-                        pay = (losses - wins) * 100;
                     }
                     result = "You win!\n" +
                              "You have to pay " + pay + " rupees to treat me.";
@@ -124,19 +122,19 @@
         updateStats();
 
         function saveResults() {
-        let data = {
-            name: playerName,
-            gamesPlayed: gamesPlayed,
-            wins: wins,
-            losses: losses,
-            pay: (losses - wins) * 100
-        };
+            let data = {
+                name: playerName,
+                gamesPlayed: gamesPlayed,
+                wins: wins,
+                losses: losses,
+                pay: (losses - wins) * 100
+            };
 
-        fetch("https://script.google.com/macros/s/AKfycbwrrCEEzV1--QiNdm7C-J-t0JXdZO2-Cr9uqXlF4V_2GsbMogrUM_RgQRQJc5BnC44/exec", {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify(data)
-        })
+            fetch("https://script.google.com/macros/s/AKfycbwrrCEEzV1--QiNdm7C-J-t0JXdZO2-Cr9uqXlF4V_2GsbMogrUM_RgQRQJc5BnC44/exec", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify(data)
+            })
             .then(response => response.text())
             .then(result => console.log("Success:", result))
             .catch(error => console.error("Error:", error));
