@@ -52,24 +52,30 @@
     <button onclick="clearResults()">Clear Results</button>
     <script>
         function loadResults() {
-            let results = JSON.parse(localStorage.getItem("gameResults")) || [];
-            let tableBody = document.getElementById("resultsTable");
-            tableBody.innerHTML = "";
-            
-            results.forEach(result => {
-                let row = `<tr>
-                    <td>${result.name}</td>
-                    <td>${result.gamesPlayed}</td>
-                    <td>${result.wins}</td>
-                    <td>${result.losses}</td>
-                    <td>${result.pay}</td>
-                </tr>`;
-                tableBody.innerHTML += row;
-            });
-        }
+            fetch(https:/script.google.com/macros/s/AKfycbx99RP4ZKOt-jmt-Kx8rpsJcZv6oEyAXOPzmpOR87YV-b2Zzy8X5NoGastJSeFF_74/exec)
+                .then(response => response.json())
+                .then(results => {
+                    let tableBody = document.getElementById("resultsTable");
+                    tableBody.innerHTML = "";
+
+                    results.forEach(result => {
+                        let row = `<tr>
+                            <td>${result.name}</td>
+                            <td>${result.gamesPlayed}</td>
+                            <td>${result.wins}</td>
+                            <td>${result.losses}</td>
+                            <td>${result.pay}</td>
+                        </tr>`;
+                        tableBody.innerHTML += row;
+                    });
+                })
+                .catch(error => console.error("Error fetching results:", error));
+}
+
+window.onload = loadResults;
 
         function clearResults() {
-            localStorage.removeItem("gameResults");
+            https:/script.google.com/macros/s/AKfycbx99RP4ZKOt-jmt-Kx8rpsJcZv6oEyAXOPzmpOR87YV-b2Zzy8X5NoGastJSeFF_74/exec.removeItem("gameResults");
             loadResults();
         }
 
