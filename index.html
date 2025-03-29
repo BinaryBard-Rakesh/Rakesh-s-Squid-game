@@ -1,52 +1,144 @@
-function playGame() {
-    let userGuess = parseInt(document.getElementById("guess").value);
-    let randomNumber = Math.floor(Math.random() * 11);
-    let pay = 0;
-    let result = "";
-
-    if (userGuess < 0 || userGuess > 10 || isNaN(userGuess)) {
-        result = "Please enter a valid number between 0 and 10.";
-    } else {
-        gamesPlayed++;
-
-        if (userGuess === randomNumber) {
-            wins++;
-            pay = (losses - wins) * 100;
-            if (pay < 0) pay = 0;
-            result = "You win!<br>" +
-                     "You have to pay " + pay + " rupees to treat me.";
-        } else {
-            losses++;
-            pay = (losses - wins) * 100;
-            result = "You lose!<br>" +
-                     "The number was: " + randomNumber + "<br>" +
-                     "You owe me a treat worth at least 100 rupees.<br>" +
-                     "You have to pay " + pay + " rupees to treat me.<br>" +
-                     "Please text me the restaurant name, place, and time.<br>" +
-                     "Better luck next time.";
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>A Treat Game</title>
+    <style>
+        body {
+            background-color: black;
+            color: green;
+            font-family: "Courier New", monospace;
+            text-align: left;
+            padding: 22px;
         }
-    }
+        h2{
+            background-color: black;
+            color: green;
+            font-family: "Courier New", monospace;
+            font-size:16px;
+            text-align: center;
+            padding: 22px;
+        }
+        h1 {
+            text-align: center;
+            font-family: "Arial", sans-serif;
+        }
+        .input-container {
+            margin: 20px;
+        }
+        .hidden {
+            display: none;
+        }
+        button {
+            margin-top: 10px;
+            padding: 8px 15px;
+            font-size: 16px;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+    <h1>Hello, It's a game from your friend Rakesh!</h1>
+    <div id="nameInput">
+        <h2>Enter your name to start:<h2>
+        <input type="text" id="playerName">
+        <button onclick="startGame()">Start Game</button>
+    </div>
 
-    document.getElementById("result").innerHTML = result;
-    updateStats();
-    saveResults();
-}
+    <div id="gameContainer" class="hidden">
+        <p>Hello, <span id="displayName"></span>!</p>
+        <p>We are playing a game. Here is a random number.</p>
+        <p>If you can guess the number, you win.</p>
+        <p>If you can't, you lose. Then you have to pay (times you lose x 100) rupees to treat me.</p>
+        <p>And if you win, then you have a chance to save your money.</p>
+        <p>(times you lose - times you win) x 100 rupees you have to pay to treat me.</p>
+        <p>So, let's start the game, and ALL THE BEST! :)</p>
+        <p>Guess a number between 0 and 10:</p>
+        <input type="number" id="guess" min="0" max="10">
+        <button onclick="playGame()">Submit</button>
+        <p id="result"></p>
+        <p id="stats"></p>
+        <!-- <button onclick="showResults()">View Results</button> -->
+    </div>
 
-function saveResults() {
-    if (!playerName) return; // Prevent sending empty data
+    <script>
+        let playerName = "";
+        let gamesPlayed = 0;
+        let wins = 0;
+        let losses = 0;
 
-    let data = {
-        name: playerName,
-        gamesPlayed: gamesPlayed,
-        wins: wins,
-        losses: losses,
-        pay: (losses - wins) * 100
-    };
+        function updateStats() {
+            document.getElementById("stats").innerText = `Games Played: ${gamesPlayed} | Wins: ${wins} | Losses: ${losses}`;
+        }
 
-    fetch("https://script.google.com/macros/s/AKfycbx99RP4ZKOt-jmt-Kx8rpsJcZv6oEyAXOPzmpOR87YV-b2Zzy8X5NoGastJSeFF_74/exec", {
-        method: "POST",
-        mode: "no-cors",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(data)
-    });
-}
+        function startGame() {
+            playerName = document.getElementById("playerName").value.trim();
+            if (playerName === "") {
+                alert("Please enter your name to start the game.");
+                return;
+            }
+            document.getElementById("nameInput").classList.add("hidden");
+            document.getElementById("gameContainer").classList.remove("hidden");
+            document.getElementById("displayName").innerText = playerName;
+        }
+
+        function playGame() {
+            let userGuess = parseInt(document.getElementById("guess").value);
+            let randomNumber = Math.floor(Math.random() * 11);
+            let pay = 0;
+            let result = "";
+
+            if (userGuess < 0 || userGuess > 10 || isNaN(userGuess)) {
+                result = "Please enter a valid number between 0 and 10.";
+            } else {
+                gamesPlayed++;
+
+                if (userGuess === randomNumber) {
+                    wins++;
+                    pay = (losses - wins) * 100;
+                    if(pay<0){
+                        pay = 0;
+                    }else{
+                        pay = (losses - wins) * 100;
+                    }
+                    result = "You win!\n" +
+                             "You have to pay " + pay + " rupees to treat me.";
+                } else {
+                    losses++;
+                    pay = (losses - wins) * 100;
+                    result = "You lose!\n" +
+                             "The number was: " + randomNumber + "\n" +
+                             "You owe me a treat worth minimum 100 rupees.\n" +
+                             "You have to pay " + pay + " rupees to treat me.\n" +
+                             "Please text me the restaurant name, place, and time.\n" +
+                             "Better luck next time.";
+                }
+            }
+
+            document.getElementById("result").innerText = result;
+            updateStats();
+            saveResults();
+        }
+
+        updateStats();
+
+        function saveResults() {
+        let data = {
+            name: playerName,
+            gamesPlayed: gamesPlayed,
+            wins: wins,
+            losses: losses,
+            pay: (losses - wins) * 100
+        };
+
+        fetch("https://script.google.com/macros/s/AKfycbx99RP4ZKOt-jmt-Kx8rpsJcZv6oEyAXOPzmpOR87YV-b2Zzy8X5NoGastJSeFF_74/exec" {
+            method: "POST",
+            mode: "no-cors",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(data)
+        });
+        }
+    </script>
+</body>
+</html>
