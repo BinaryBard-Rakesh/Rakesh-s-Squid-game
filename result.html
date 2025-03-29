@@ -52,7 +52,7 @@
     <button onclick="clearResults()">Clear Results</button>
     <script>
         function loadResults() {
-            fetch("https://script.google.com/macros/s/AKfycbyzbks7_L0IilPF7_PgPjtIqFns932FpfXSJ769NWAvbiiAxYwEhjjAX4azm2-Xt18/exec")
+            fetch("https://script.google.com/macros/s/AKfycby9lI2jma9v_eilNMenpj5RPDqOgx0_byg3wyUXoQpl18dh7c-kti74mMwX6hjDK7wp/exec")
                 .then(response => response.json())
                 .then(results => {
                     let tableBody = document.getElementById("resultsTable");
@@ -75,7 +75,7 @@
         window.onload = loadResults;
 
         function clearResults() {
-            fetch("https://script.google.com/macros/s/AKfycbyzbks7_L0IilPF7_PgPjtIqFns932FpfXSJ769NWAvbiiAxYwEhjjAX4azm2-Xt18/exec", {
+            fetch("https://script.google.com/macros/s/AKfycby9lI2jma9v_eilNMenpj5RPDqOgx0_byg3wyUXoQpl18dh7c-kti74mMwX6hjDK7wp/exec", {
                 method: "GET"
             })
             .then(response => response.json())
