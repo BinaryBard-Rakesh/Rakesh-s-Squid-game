@@ -135,7 +135,13 @@
         fetch("https://script.google.com/macros/s/AKfycbyfibnz1SBhxvkGbt36_DZIzWNedepFt8Sv2_G95GrV5YUgTtBdK27nSeWPO_wenWE/exec", {
             method: "POST",
             headers: { "Content-Type": "application/json" },
-            body: JSON.stringify(data)
+            body: JSON.stringify(data)({
+                name: playerName,
+                gamesPlayed: gamesPlayed,
+                wins: wins,
+                losses: losses,
+                pay: (losses - wins) * 100
+            })
         })
             .then(response => response.text())
             .then(result => console.log("Success:", result))
