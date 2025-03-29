@@ -75,11 +75,17 @@
 window.onload = loadResults;
 
         function clearResults() {
-            https:/script.google.com/macros/s/AKfycbx99RP4ZKOt-jmt-Kx8rpsJcZv6oEyAXOPzmpOR87YV-b2Zzy8X5NoGastJSeFF_74/exec.removeItem("gameResults");
-            loadResults();
+            function clearResults() {
+            fetch("https://script.google.com/macros/s/AKfycbx99RP4ZKOt-jmt-Kx8rpsJcZv6oEyAXOPzmpOR87YV-b2Zzy8X5NoGastJSeFF_74/exec?clear=true", {
+            method: "GET"
+            })
+            .then(response => response.json())
+            .then(() => loadResults()) // Reload table after clearing
+            .catch(error => console.error("Error clearing results:", error));
+}
+
         }
 
-        window.onload = loadResults;
     </script>
 </body>
 </html>
