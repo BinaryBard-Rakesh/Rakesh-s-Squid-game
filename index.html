@@ -124,19 +124,20 @@
         updateStats();
 
         function saveResults() {
-        let results = JSON.parse(localStorage.getItem("gameResults")) || [];
-        let existing = results.find(r => r.name === playerName);
+        let data = {
+            name: playerName,
+            gamesPlayed: gamesPlayed,
+            wins: wins,
+            losses: losses,
+            pay: (losses - wins) * 100
+        };
 
-        if (existing) {
-            existing.gamesPlayed = gamesPlayed;
-            existing.wins = wins;
-            existing.losses = losses;
-            existing.pay = (losses - wins) * 100;
-        } else {
-            results.push({ name: playerName, gamesPlayed, wins, losses, pay: (losses - wins) * 100 });
-        }
-
-        localStorage.setItem("gameResults", JSON.stringify(results));
+        fetch(https:/script.google.com/macros/s/AKfycbx99RP4ZKOt-jmt-Kx8rpsJcZv6oEyAXOPzmpOR87YV-b2Zzy8X5NoGastJSeFF_74/exec, {
+            method: "POST",
+            mode: "no-cors",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(data)
+        });
         }
     </script>
 </body>
